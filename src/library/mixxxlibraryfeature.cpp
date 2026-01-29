@@ -54,6 +54,7 @@ MixxxLibraryFeature::MixxxLibraryFeature(Library* pLibrary,
             LIBRARYTABLE_TRACKNUMBER,
             LIBRARYTABLE_KEY,
             LIBRARYTABLE_KEY_ID,
+            LIBRARYTABLE_TUNING_FREQUENCY,
             LIBRARYTABLE_BPM,
             LIBRARYTABLE_BPM_LOCK,
             LIBRARYTABLE_BEATS_VERSION,
@@ -232,7 +233,14 @@ bool MixxxLibraryFeature::dropAccept(const QList<QUrl>& urls, QObject* pSource) 
             DragAndDropHelper::supportedTracksFromUrls(urls, false, true);
     const QList<TrackId> trackIds =
             m_pLibrary->trackCollectionManager()->resolveTrackIds(fileInfos, nullptr);
-    return trackIds.size() > 0;
+    if (trackIds.size() == 0) {
+        return false;
+    }
+
+    // Update the track count in the sidebar item label.
+    // Calls slotUpdateTrackCount()
+    m_pLibraryTableModel->select();
+    return true;
 }
 
 bool MixxxLibraryFeature::dragMoveAccept(const QList<QUrl>& urls) {
