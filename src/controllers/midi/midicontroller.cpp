@@ -75,8 +75,9 @@ QList<std::shared_ptr<AbstractLegacyControllerSetting>> MidiController::getMappi
 }
 
 const QString& MidiController::getSharedDataNamespace() {
+    static const QString empty = QString();
     if (!m_pMapping) {
-        return QStringLiteral("");
+        return empty;
     }
     return m_pMapping->sharedDataNamespace();
 }
